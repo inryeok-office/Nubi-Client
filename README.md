@@ -3,18 +3,27 @@
 광주광역시 교통약자 이동지원 및 이동권 분석 플랫폼 **누비(NUBI)**의
 시민용 Client입니다.
 
-## 프로젝트 목적
+## 현재 데모 흐름
 
-Server API 계약과 공공데이터 조사가 진행되는 동안, 계약이 확정되는 즉시
-기능 개발을 시작할 수 있는 안정적인 프론트엔드 기반을 준비합니다.
+현재 위치 → 주변 정류장 → 정류장 선택 → 실시간 도착 차량 → 저상버스
+관찰 상태
 
-현재 목표 흐름은 다음과 같습니다.
+Server 계약이 확정된 범위에서 첫 시민용 흐름을 구현하고 있습니다. 저상버스
+표시는 조회 시점의 원천 관찰값이며, 휠체어 탑승 가능이나 운행 지속을
+보장하지 않습니다.
 
-출발지/목적지 → 주변 정류장 → 이용 가능한 대중교통 → 저상버스 정보 →
-실시간 도착정보 → 이동경로
+## Server 계약
 
-현재 단계에서는 실제 경로 알고리즘, 버스 API, 지도 Provider, 로그인과
-기관용 분석 화면을 구현하지 않습니다.
+현재 `inryeok-office/Nubi-Server`의 `main` 문서와 Controller 기준으로
+다음 endpoint만 사용합니다.
+
+- `GET /api/v1/stops/nearby?latitude={lat}&longitude={lon}&radiusMeters=500&limit=20`
+- `GET /api/v1/stops/{stopId}`
+- `GET /api/v1/stops/{stopId}/arrivals`
+- `GET /api/v1/routes/{routeId}`
+
+도착정보의 `lowFloorStatus`는 `low-floor`, `standard`, `unknown` 중 하나이며,
+응답의 `dataSource`, `fetchedAt`, `observedAt`를 함께 사용합니다.
 
 ## 요구사항
 
@@ -25,49 +34,54 @@ Server API 계약과 공공데이터 조사가 진행되는 동안, 계약이 �
 
 ```bash
 npm install
-Copy-Item .env.example .env.local
+cp .env.example .env.local
 npm run dev
 ```
 
-macOS/Linux에서는 환경변수 파일 복사에 `cp .env.example .env.local`을
-사용합니다.
+Windows PowerShell에서는 `Copy-Item .env.example .env.local`을 사용합니다.
+
+개발 서버는 기본적으로 `/api` 요청을 `http://localhost:8080`으로 proxy합니다.
+이는 Server에 CORS를 임의로 완화하지 않고 로컬 Client와 Server를 연결하기
+위한 개발 편의 설정입니다.
 
 ## 환경변수
 
-`.env.example`을 복사해 사용합니다.
+| 변수                        | 설명                          | 기본값                  |
+| --------------------------- | ----------------------------- | ----------------------- |
+| `VITE_API_BASE_URL`         | Server API base URL           | `/api`                  |
+| `VITE_API_PROXY_TARGET`     | Vite 개발 proxy 대상          | `http://localhost:8080` |
+| `VITE_MAP_PROVIDER_API_KEY` | 지도 Provider 키(현재 미사용) | 없음                    |
+| `VITE_API_TIMEOUT_MS`       | API 요청 timeout(ms)          | `10000`                 |
 
-| 변수                        | 설명                   | 기본값  |
-| --------------------------- | ---------------------- | ------- |
-| `VITE_API_BASE_URL`         | Server API base URL    | `/api`  |
-| `VITE_MAP_PROVIDER_API_KEY` | 지도 Provider 키(선택) | 없음    |
-| `VITE_API_TIMEOUT_MS`       | API 요청 timeout(ms)   | `10000` |
-
-실제 키와 비밀값은 커밋하지 않습니다. 지도 Provider가 결정되기 전에는
-키가 있어도 SDK를 활성화하지 않습니다.
+실제 Key와 Secret은 커밋하지 않습니다. 지도 Provider가 확정되기 전에는
+`VITE_MAP_PROVIDER_API_KEY`가 있어도 SDK를 활성화하지 않습니다.
 
 ## 품질 검사
 
 ```bash
+npm run format:check
 npm run lint
 npm run typecheck
 npm test
 npm run build
 ```
 
-GitHub Actions에서도 install, lint, typecheck, test, build를 동일하게
-실행합니다.
+GitHub Actions에서도 install, lint, typecheck, test, build를 실행합니다.
 
 ## 구조
 
-- `src/app`: 애플리케이션 진입, Router, QueryClient, Error Boundary
+- `src/app`: Router, QueryClient, Error Boundary
+- `src/features/location`: 브라우저 Geolocation 상태와 오류 처리
+- `src/features/transit`: Server 계약 타입, API 함수, Query hook, 정류장/도착정보 UI
 - `src/pages`: 화면 단위 구성
-- `src/shared/api`: endpoint 없는 공통 API Client와 query key 규칙
+- `src/shared/api`: 공통 API Client와 query key 규칙
 - `src/shared/map`: 좌표·viewport·marker와 Provider-neutral 지도 계층
 - `src/shared/ui`: loading/error/empty 상태 표현
 
-## 현재 개발 단계
+## 아직 구현하지 않은 기능
 
-- 초기 Bootstrap과 접근성을 고려한 모바일 우선 shell 완료
-- Server API 계약 대기 중
-- 지도 Provider 결정 및 실제 SDK 연결 대기 중
-- 실제 시민용 이동 기능과 기관용 분석 기능은 미구현
+- 지도 Provider SDK 연결
+- 완전한 출발지/목적지 경로 추천
+- 탑승 가능 보장 또는 자체 접근성 점수
+- 로그인, 개인정보 저장, 즐겨찾기, 알림
+- 기관용 분석 대시보드

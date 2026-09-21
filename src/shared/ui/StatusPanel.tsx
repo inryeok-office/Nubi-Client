@@ -16,7 +16,10 @@ export function StatusPanel({
   action,
 }: StatusPanelProps) {
   return (
-    <section className={`status-panel status-panel--${kind}`} role="status">
+    <section
+      className={`status-panel status-panel--${kind}`}
+      role={kind === 'error' ? 'alert' : 'status'}
+    >
       <span className="status-panel__icon" aria-hidden="true">
         {kind === 'loading' ? '…' : kind === 'error' ? '!' : 'i'}
       </span>

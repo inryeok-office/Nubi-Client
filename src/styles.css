@@ -283,3 +283,256 @@ h2 {
     margin: 20px 0;
   }
 }
+
+.location-card {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+}
+
+.location-card__content {
+  min-width: 0;
+}
+
+.location-card__content h2 {
+  margin-bottom: 4px;
+}
+
+.location-card__content p:last-child {
+  margin-bottom: 0;
+  color: #55716f;
+}
+
+.location-button {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.inline-error {
+  color: #a33c32 !important;
+  font-weight: 600;
+}
+
+.flow-section {
+  margin-top: 20px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.section-heading h2 {
+  margin-bottom: 0;
+}
+
+.result-count {
+  color: #55716f;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stop-list,
+.arrival-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stop-card {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 72px;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 14px 48px 14px 16px;
+  border: 1px solid #d9e8e5;
+  border-radius: 16px;
+  background: #fff;
+  color: #173b3a;
+  cursor: pointer;
+  text-align: left;
+}
+
+.stop-card:hover,
+.stop-card--selected {
+  border-color: #0f766e;
+  background: #f3fbf9;
+}
+
+.stop-card:focus-visible {
+  outline: 3px solid #e7a72b;
+  outline-offset: 2px;
+}
+
+.stop-card__name {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.stop-card__meta {
+  color: #55716f;
+  font-size: 0.88rem;
+}
+
+.stop-card__action {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  color: #0f766e;
+  font-size: 0.86rem;
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+
+.back-button {
+  min-height: 48px;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #0f766e;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.selected-stop {
+  padding: 20px;
+  border: 1px solid #d9e8e5;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(33 78 74 / 6%);
+}
+
+.selected-stop__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.selected-stop__header h2 {
+  margin-bottom: 0;
+}
+
+.selected-stop__location,
+.arrival-meta {
+  margin-bottom: 20px;
+  color: #55716f;
+  font-size: 0.9rem;
+}
+
+.stop-location-summary {
+  display: none;
+}
+
+.inline-status {
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.arrival-card {
+  padding: 16px;
+  border: 1px solid #e0ebe9;
+  border-radius: 16px;
+  background: #fbfdfd;
+}
+
+.arrival-card__topline,
+.arrival-card__details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.arrival-card__topline {
+  align-items: start;
+}
+
+.arrival-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.arrival-card__details {
+  justify-content: flex-start;
+  margin-top: 10px;
+  color: #173b3a;
+  font-weight: 700;
+}
+
+.arrival-card__details span + span::before {
+  margin-right: 8px;
+  color: #a3b8b5;
+  content: '·';
+}
+
+.arrival-card__observed {
+  margin: 12px 0 0;
+  color: #6a7d7b;
+  font-size: 0.8rem;
+}
+
+.low-floor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 5px 9px;
+  border: 1px solid #b8ddd7;
+  border-radius: 999px;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.low-floor-badge--standard {
+  border-color: #d9cda4;
+  color: #826814;
+}
+
+.low-floor-badge--unknown {
+  border-color: #cbd4d3;
+  color: #5e6d6b;
+}
+
+.low-floor-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+@media (max-width: 639px) {
+  .location-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .location-button {
+    width: 100%;
+  }
+
+  .arrival-card__details {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .arrival-card__details span + span::before {
+    display: none;
+  }
+}

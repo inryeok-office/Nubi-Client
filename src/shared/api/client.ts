@@ -3,12 +3,14 @@ import { env } from '../config/env';
 export class ApiError extends Error {
   readonly status: number;
   readonly details: unknown;
+  readonly code?: string;
 
-  constructor(message: string, status = 0, details?: unknown) {
+  constructor(message: string, status = 0, details?: unknown, code?: string) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
     this.details = details;
+    this.code = code;
   }
 }
 
@@ -44,11 +46,14 @@ export async function requestJson<T>(
       : await response.text();
 
     if (!response.ok) {
+      const isErrorPayload = typeof payload === 'object' && payload !== null;
       const message =
-        typeof payload === 'object' && payload !== null && 'message' in payload
+        isErrorPayload && 'message' in payload
           ? String(payload.message)
           : `API 요청에 실패했습니다. (${response.status})`;
-      throw new ApiError(message, response.status, payload);
+      const code =
+        isErrorPayload && 'code' in payload ? String(payload.code) : undefined;
+      throw new ApiError(message, response.status, payload, code);
     }
 
     return payload as T;

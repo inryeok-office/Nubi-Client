@@ -9,9 +9,15 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: '누비' })).toBeInTheDocument();
     expect(
+      screen.getByRole('button', { name: '현재 위치로 정류장 찾기' }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole('region', { name: '지도 영역' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('출발지를 선택해 주세요')).toBeInTheDocument();
-    expect(screen.getByText('목적지를 선택해 주세요')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: '위치를 확인하면 정류장이 표시돼요',
+      }),
+    ).toBeInTheDocument();
   });
 });
